@@ -1,0 +1,37 @@
+# Keil MDK build artifacts
+*.o
+*.crf
+*.d
+*.axf
+*.hex
+*.htm
+*.html
+*.lnp
+*.map
+*.sct
+*.dep
+*.lst
+*.scvd
+
+# Keil temp/config files
+*.uvoptx
+*.uvoptx.bak
+*.uvguix.*
+build_log_opt.txt
+JLinkLog.txt
+JLinkSettings.ini
+DebugConfig/
+RTE/
+
+# VS Code
+.vscode/
+
+# Trae
+.trae/
+
+# Build output directory
+MDK-ARM/reverse_radar/
+
+# OS files
+Thumbs.db
+desktop.ini

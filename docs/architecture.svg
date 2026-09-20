@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: bold; fill: #1a1a2e; }
+      .layer-label { font-size: 13px; font-weight: bold; fill: #555; }
+      .task-name { font-size: 12px; font-weight: bold; fill: #1a1a2e; }
+      .task-detail { font-size: 10px; fill: #666; }
+      .module-name { font-size: 11px; font-weight: bold; fill: #1a1a2e; }
+      .arrow { stroke: #999; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead); }
+      .mutex-label { font-size: 9px; fill: #c0392b; font-style: italic; }
+    </defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#999"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="25" text-anchor="middle" class="title">STM32F103 倒车雷达 — 系统架构</text>
+
+  <!-- Layer labels -->
+  <text x="20" y="60" class="layer-label">应用层 (Application/)</text>
+  <text x="20" y="280" class="layer-label">驱动层 (Core/Src/)</text>
+  <text x="20" y="430" class="layer-label">RTOS + HAL</text>
+
+  <!-- FreeRTOS Tasks -->
+  <rect x="30" y="75" width="130" height="80" rx="6" fill="#e8f4fd" stroke="#2980b9" stroke-width="2"/>
+  <text x="95" y="95" text-anchor="middle" class="task-name">InitTask</text>
+  <text x="95" y="110" text-anchor="middle" class="task-detail">Prio: 6</text>
+  <text x="95" y="125" text-anchor="middle" class="task-detail">Stack: 512w</text>
+  <text x="95" y="140" text-anchor="middle" class="task-detail">硬件初始化+校准</text>
+
+  <rect x="180" y="75" width="130" height="80" rx="6" fill="#e8f4fd" stroke="#2980b9" stroke-width="2"/>
+  <text x="245" y="95" text-anchor="middle" class="task-name">SensorTask</text>
+  <text x="245" y="110" text-anchor="middle" class="task-detail">Prio: 5</text>
+  <text x="245" y="125" text-anchor="middle" class="task-detail">Stack: 512w, 10ms</text>
+  <text x="245" y="140" text-anchor="middle" class="task-detail">测距+姿态+温度</text>
+
+  <rect x="330" y="75" width="110" height="80" rx="6" fill="#e8f4fd" stroke="#2980b9" stroke-width="2"/>
+  <text x="385" y="95" text-anchor="middle" class="task-name">AlarmTask</text>
+  <text x="385" y="110" text-anchor="middle" class="task-detail">Prio: 4</text>
+  <text x="385" y="125" text-anchor="middle" class="task-detail">50ms</text>
+  <text x="385" y="140" text-anchor="middle" class="task-detail">四区报警</text>
+
+  <rect x="460" y="75" width="110" height="80" rx="6" fill="#e8f4fd" stroke="#2980b9" stroke-width="2"/>
+  <text x="515" y="95" text-anchor="middle" class="task-name">EncoderTask</text>
+  <text x="515" y="110" text-anchor="middle" class="task-detail">Prio: 4</text>
+  <text x="515" y="125" text-anchor="middle" class="task-detail">2ms 轮询</text>
+  <text x="515" y="140" text-anchor="middle" class="task-detail">编码器扫描</text>
+
+  <rect x="590" y="75" width="130" height="80" rx="6" fill="#e8f4fd" stroke="#2980b9" stroke-width="2"/>
+  <text x="655" y="95" text-anchor="middle" class="task-name">DisplayTask</text>
+  <text x="655" y="110" text-anchor="middle" class="task-detail">Prio: 2</text>
+  <text x="655" y="125" text-anchor="middle" class="task-detail">Stack: 384w, 50ms</text>
+  <text x="655" y="140" text-anchor="middle" class="task-detail">OLED 显示+菜单</text>
+
+  <!-- Mutex layer -->
+  <rect x="30" y="180" width="690" height="35" rx="4" fill="#fadbd8" stroke="#c0392b" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="375" y="202" text-anchor="middle" class="mutex-label">xMutexI2C (I2C 总线互斥)  |  xMutexSensor (共享数据互斥)  |  xMutexSysConfig (配置参数互斥)</text>
+
+  <!-- Arrows from tasks to mutex -->
+  <line x1="245" y1="155" x2="245" y2="180" class="arrow"/>
+  <line x1="655" y1="155" x2="655" y2="180" class="arrow"/>
+
+  <!-- BSP Drivers -->
+  <rect x="30" y="295" width="110" height="55" rx="6" fill="#d5f5e3" stroke="#27ae60" stroke-width="2"/>
+  <text x="85" y="315" text-anchor="middle" class="module-name">OLED (SSD1306)</text>
+  <text x="85" y="330" text-anchor="middle" class="task-detail">I2C, 双缓冲</text>
+  <text x="85" y="343" text-anchor="middle" class="task-detail">PB6/PB7</text>
+
+  <rect x="160" y="295" width="110" height="55" rx="6" fill="#d5f5e3" stroke="#27ae60" stroke-width="2"/>
+  <text x="215" y="315" text-anchor="middle" class="module-name">MPU6050</text>
+  <text x="215" y="330" text-anchor="middle" class="task-detail">I2C, 姿态解耦</text>
+  <text x="215" y="343" text-anchor="middle" class="task-detail">Roll/Pitch</text>
+
+  <rect x="290" y="295" width="110" height="55" rx="6" fill="#d5f5e3" stroke="#27ae60" stroke-width="2"/>
+  <text x="345" y="315" text-anchor="middle" class="module-name">DS18B20</text>
+  <text x="345" y="330" text-anchor="middle" class="task-detail">1-Wire</text>
+  <text x="345" y="343" text-anchor="middle" class="task-detail">非阻塞 750ms</text>
+
+  <rect x="420" y="295" width="110" height="55" rx="6" fill="#d5f5e3" stroke="#27ae60" stroke-width="2"/>
+  <text x="475" y="315" text-anchor="middle" class="module-name">HC-SR04</text>
+  <text x="475" y="330" text-anchor="middle" class="task-detail">DWT 计时</text>
+  <text x="475" y="343" text-anchor="middle" class="task-detail">PB8/PB9</text>
+
+  <rect x="550" y="295" width="110" height="55" rx="6" fill="#d5f5e3" stroke="#27ae60" stroke-width="2"/>
+  <text x="605" y="315" text-anchor="middle" class="module-name">Filter</text>
+  <text x="605" y="330" text-anchor="middle" class="task-detail">中值+滑动平均</text>
+  <text x="605" y="343" text-anchor="middle" class="task-detail">5+5 点</text>
+
+  <rect x="680" y="295" width="40" height="55" rx="6" fill="#d5f5e3" stroke="#27ae60" stroke-width="2"/>
+  <text x="700" y="325" text-anchor="middle" class="module-name" font-size="10">Encoder</text>
+
+  <!-- Arrows from tasks to BSP -->
+  <line x1="245" y1="215" x2="215" y2="295" class="arrow" stroke="#27ae60"/>
+  <line x1="655" y1="215" x2="85" y2="295" class="arrow" stroke="#27ae60"/>
+  <line x1="245" y1="215" x2="345" y2="295" class="arrow" stroke="#27ae60"/>
+  <line x1="245" y1="215" x2="475" y2="295" class="arrow" stroke="#27ae60"/>
+
+  <!-- RTOS + HAL layer -->
+  <rect x="30" y="445" width="200" height="50" rx="6" fill="#fcf3cf" stroke="#f39c12" stroke-width="2"/>
+  <text x="130" y="465" text-anchor="middle" class="module-name">FreeRTOS</text>
+  <text x="130" y="480" text-anchor="middle" class="task-detail">Cortex-M3 port, heap_4, 10KB</text>
+  <text x="130" y="490" text-anchor="middle" class="task-detail">5 任务 + 2 hook</text>
+
+  <rect x="250" y="445" width="200" height="50" rx="6" fill="#fcf3cf" stroke="#f39c12" stroke-width="2"/>
+  <text x="350" y="465" text-anchor="middle" class="module-name">STM32 HAL</text>
+  <text x="350" y="480" text-anchor="middle" class="task-detail">GPIO/I2C/UART/TIM</text>
+  <text x="350" y="490" text-anchor="middle" class="task-detail">SysTick 双模式</text>
+
+  <rect x="470" y="445" width="250" height="50" rx="6" fill="#fcf3cf" stroke="#f39c12" stroke-width="2"/>
+  <text x="595" y="465" text-anchor="middle" class="module-name">STM32F103C8T6 Hardware</text>
+  <text x="595" y="480" text-anchor="middle" class="task-detail">Cortex-M3 @72MHz | 64KB Flash | 20KB SRAM</text>
+  <text x="595" y="490" text-anchor="middle" class="task-detail">NVIC Priority Group 4</text>
+
+  <!-- Arrows to HAL -->
+  <line x1="130" y1="350" x2="130" y2="445" class="arrow"/>
+  <line x1="350" y1="350" x2="350" y2="445" class="arrow"/>
+  <line x1="595" y1="350" x2="595" y2="445" class="arrow"/>
+
+  <!-- Data flow -->
+  <rect x="30" y="525" width="690" height="40" rx="4" fill="#f4f6f7" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="375" y="548" text-anchor="middle" class="task-detail" font-size="11">
+    数据流: 传感器 → SensorTask → xMutexSensor 共享数据 → AlarmTask/DisplayTask → 报警输出/OLED 显示
+  </text>
+
+  <!-- Footer -->
+  <text x="375" y="600" text-anchor="middle" font-size="10" fill="#999">
+    Flash: ~26KB / 64KB  |  RAM: ~13KB / 20KB  |  GitHub: YANG146-STAR/reverse_radar
+  </text>
+</svg>
