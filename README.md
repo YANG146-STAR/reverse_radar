@@ -64,7 +64,7 @@ reverse_radar/
 
 ## 系统架构图
 
-![Architecture](docs/architecture.svg)
+![Architecture](https://raw.githubusercontent.com/YANG146-STAR/reverse_radar/main/docs/architecture.svg)
 
 ## FreeRTOS 任务架构
 
